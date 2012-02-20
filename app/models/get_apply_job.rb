@@ -1,0 +1,3 @@
+class GetApplyJob < AbstractJob
+  
+end
