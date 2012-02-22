@@ -6,4 +6,8 @@ class MbokSearchJob < AbstractJob
   def mbok_url
     "http://www.mbok.jp/-l?q=#{params["q"]}"
   end
+
+  def filter
+    
+  end
 end

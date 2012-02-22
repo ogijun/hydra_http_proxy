@@ -28,14 +28,17 @@ class JobBundleController < ApplicationController
       render :text => 'No Job'
     else
       b = JSON.parse(bj)
-      results = []
+      job_results = []
       b["bundle"].each do |job|
         file = HtmlFile.by_url(job["url"]).first
-        result = { :request => job, :result => { :body => file.body } }
-        results.push result
+        job_filter = job["filter"]
+        if job_filter.blank? or  job_filter == 'ident'
+          result = file.body
+        end
+        job_results.push({ :request => job, :result => result })
       end
       headers["Content-Type"] ||= 'text/json'
-      render :text => results.to_json
+      render :text => job_results.to_json
     end
   end
 

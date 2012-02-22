@@ -8,7 +8,6 @@ class MbokItemJob < AbstractJob
   end
 
   def filter
-    
   end
 
 end
