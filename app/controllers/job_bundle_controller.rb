@@ -34,6 +34,11 @@ class JobBundleController < ApplicationController
         job_filter = job["filter"]
         if job_filter.blank? or  job_filter == 'ident'
           result = file.body
+        elsif job_filter == 'mbok_item'
+          result = { :content => MbokItemJob.extract(file.body) }
+        elsif job_filter == 'mbok_search'
+          result = { :content => MbokSearchJob.extract(file.body) }
+          p file.body
         end
         job_results.push({ :request => job, :result => result })
       end
