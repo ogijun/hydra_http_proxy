@@ -38,7 +38,8 @@ class JobBundleController < ApplicationController
           result = { :content => MbokItemJob.extract(file.body) }
         elsif job_filter == 'mbok_search'
           result = { :content => MbokSearchJob.extract(file.body) }
-          p file.body
+        elsif job_filter == 'bidders_search'
+          result = { :content => BiddersSearchJob.extract(file.body) }
         end
         job_results.push({ :request => job, :result => result })
       end
