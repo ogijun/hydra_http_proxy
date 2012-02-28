@@ -28,16 +28,15 @@ class BiddersSearchJob < AbstractJob
   end
 
   def self.extract_row node
-    node.text
-    # {
-    #   :text => node[0].text,
-    #   :url => node[1].text,
-    #   :seller => node.css('a')[2].text,
-    #   :price => node.at_css('.li_price').text,
-    #   :bid => node.at_css('.li_bid').text,
-    #   :time => node.at_css('.li_time').text,
-    #   :bid => node.at_css('.li_bid').text,
-    #   :img => node.at_css('.imgbox img')['src'],
-    # }
+    nodes = node.css('td')
+    {
+      :img => nodes[0].at_css('img')['src'],
+      :title => nodes[3].at_css('a').text,
+      :url => 'http://www.bidders.co.jp' + nodes[3].at_css('a')[:href],
+      :seller => nodes[3].children[0].children[1].text,
+      :price => nodes[6].at_css('b').text,
+      :bid => nodes[8].text,
+      :time => nodes[10].text
+    }
   end
 end
