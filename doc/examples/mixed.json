@@ -1,0 +1,26 @@
+{
+    "bundle":
+    [
+        {
+            "job_type": "get_apply",
+            "url": "http://hoge.com/",
+            "filter": ["hoge"]
+        },
+        {
+            "job_type": "mbok_item",
+            "auction_id": "332364215"
+        },
+        {
+            "job_type": "mbok_search",
+            "q": "rolex"
+        },
+        {
+            "job_type": "get_apply",
+            "url": "http://hogehogehoge.com/"
+        },
+        {
+            "job_type": "get_apply",
+            "url": "http://hogehogehogehoge.com/"
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+{
+    "bundle":
+    [
+        {
+            "job_type": "mb_search",
+            "options": {
+                "q": "rolex",
+                "p": 1
+            }
+        }
+    ]
+}
