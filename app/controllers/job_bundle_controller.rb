@@ -40,6 +40,9 @@ class JobBundleController < ApplicationController
           result = { :content => MbokSearchJob.extract(file.body) }
         elsif job_filter == 'bidders_search'
           result = { :content => BiddersSearchJob.extract(file.body) }
+        elsif job_filter == 'yahoo_search'
+          result = { :content => YahooSearchJob.extract(file.body) }
+        else
         end
         job_results.push({ :request => job, :result => result })
       end

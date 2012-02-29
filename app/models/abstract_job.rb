@@ -9,6 +9,8 @@ class AbstractJob
       MbokSearchJob.new params
     when /bi_search/
       BiddersSearchJob.new params
+    when /ya_search/
+      YahooSearchJob.new params
     else
       self.new params
     end

@@ -2,10 +2,10 @@
     "bundle":
     [
         {
-            "job_type": "mb_search",
+            "job_type": "ya_search",
             "options": {
                 "q": "rolex",
-                "page": 1
+                "page": 2
             }
         }
     ]
