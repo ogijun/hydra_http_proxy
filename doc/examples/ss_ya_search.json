@@ -1,0 +1,14 @@
+{
+    "bundle":
+    [
+        {
+            "job_type": "ss_search",
+            "options": {
+                "q": "rolex",
+                "page": 1,
+                "ym": "201111",
+                "s": "ya"
+            }
+        }
+    ]
+}

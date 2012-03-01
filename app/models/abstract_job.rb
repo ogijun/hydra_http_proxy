@@ -11,6 +11,8 @@ class AbstractJob
       BiddersSearchJob.new params
     when /ya_search/
       YahooSearchJob.new params
+    when /ss_search/
+      SsSearchJob.new params
     else
       self.new params
     end
