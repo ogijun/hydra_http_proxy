@@ -11,6 +11,8 @@ class AbstractJob
       BiddersSearchJob.new params
     when /ya_search/
       YahooSearchJob.new params
+    when /ra_search/
+      RakutenSearchJob.new params
     when /ss_search/
       SsSearchJob.new params
     else

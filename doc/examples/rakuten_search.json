@@ -1,0 +1,12 @@
+{
+    "bundle":
+    [
+        {
+            "job_type": "ra_search",
+            "options": {
+                "q": "rolex",
+                "page": 2
+            }
+        }
+    ]
+}
