@@ -7,7 +7,7 @@ class RakutenSearchJob < AbstractJob
   def rakuten_url
     base = "http://esearch.rakuten.co.jp/rms/sd/esearch/vc"
     opt = params['options']
-    page = opt['page'].to_i - 1
+    page = opt['page'].to_i
     g = 1050000000
     s = 3
     "#{base}?sv=13&f=A&g=#{g}&v=2&e=0&p=#{page}&s=#{s}&oid=000&sub=1&k=0&sf=1&sitem=#{opt['q']}&x=0"
@@ -16,7 +16,7 @@ class RakutenSearchJob < AbstractJob
   require 'nokogiri'
   def self.extract body
     doc = Nokogiri::HTML(body)
-    list =  doc.xpath("//table[@width='100%'][@border='0'][@cellspacing='1'][@cellpadding='3']").children[1, 1].map { |node| extract_row node }
+    list =  doc.xpath("//table[@width='100%'][@border='0'][@cellspacing='1'][@cellpadding='3']").children[1, 30].map { |node| extract_row node }
     count = doc.xpath("//tr[@align='left']/td/font[@size='-1']").map(&:text)[0].split(' ').last.scan(/\d+/).join.to_i
     { :list => list, :count => count }
   end
