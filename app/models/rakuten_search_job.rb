@@ -13,8 +13,24 @@ class RakutenSearchJob < AbstractJob
     "#{base}?sv=13&f=A&g=#{g}&v=2&e=0&p=#{page}&s=#{s}&oid=000&sub=1&k=0&sf=1&sitem=#{opt['q']}&x=0"
   end
 
+  require 'nokogiri'
   def self.extract body
-    { :list => body, :count => nil }
+    doc = Nokogiri::HTML(body)
+    list =  doc.xpath("//table[@width='100%'][@border='0'][@cellspacing='1'][@cellpadding='3']").children[1, 1].map { |node| extract_row node }
+    count = doc.xpath("//tr[@align='left']/td/font[@size='-1']").map(&:text)[0].split(' ').last.scan(/\d+/).join.to_i
+    { :list => list, :count => count }
+  end
+
+  def self.extract_row node
+require 'pp'
+    {
+      :url => node.at_css('a')['href'],
+      :img => node.at_css('img')['src'],
+      :title => node.children[2].at_css('a').text.sub(/\n\s+/, ''),
+      :price => node.children[4].text.scan(/\d+/).join.to_i,
+      :bid => node.children[8].text,
+      :end => node.children[10].text
+    }
   end
 
 end
