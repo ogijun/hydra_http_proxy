@@ -3,9 +3,9 @@ class AbstractJob
 
   def self.build params
     case params["job_type"]
-    when /mb_item/
+    when /mo_item/
       MbokItemJob.new params
-    when /mb_search/
+    when /mo_search/
       MbokSearchJob.new params
     when /bi_search/
       BiddersSearchJob.new params
