@@ -23,7 +23,7 @@ class BiddersSearchJob < AbstractJob
     all_table_nodes = doc.css('table')
     list_nodes = all_table_nodes.find { |node| node.css('table').length == 40 }
     list = list_nodes.children[3, 80].each_slice(2).map { |node, dum| extract_row node }
-    count = nil
+    count = all_table_nodes.at_css('.text12 .white b').text.scan(/\d+/).join.to_i
     { :list => list, :count => count }
   end
 
