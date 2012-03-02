@@ -33,7 +33,7 @@ class BiddersSearchJob < AbstractJob
       :img => nodes[0].at_css('img')['src'],
       :title => nodes[3].at_css('a').text,
       :url => 'http://www.bidders.co.jp' + nodes[3].at_css('a')[:href],
-      :seller => nodes[3].children[0].children[1].text,
+      :seller => nil,
       :price => nodes[6].at_css('b').text,
       :bid => nodes[8].text,
       :time => nodes[10].text
