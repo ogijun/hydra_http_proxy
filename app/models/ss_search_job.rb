@@ -14,12 +14,13 @@ class SsSearchJob < AbstractJob
   def self.extract body
     require 'stringio'
     str = StringIO.new body
-    count = str.gets.chomp.split(':').last.to_i
+    site, count = str.gets.chomp.split(':')
     list = []
     str.readlines.each do |row|
       unless row =~ /^<\/html>/
         cols = row.split "\t"
         item = {
+          :site => site,
           :title => cols[4],
           :bid => cols[0],
           :price => cols[1],
@@ -29,7 +30,7 @@ class SsSearchJob < AbstractJob
         list.push item
       end
     end
-    { :list => list, :count => count }
+    { :list => list, :count => count.to_i }
   end
 
 end
