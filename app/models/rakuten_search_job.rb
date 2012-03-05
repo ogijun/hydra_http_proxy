@@ -23,14 +23,13 @@ class RakutenSearchJob < AbstractJob
   end
 
   def self.extract_row node
-require 'pp'
     {
       :url => node.at_css('a')['href'],
       :img => node.at_css('img')['src'],
       :title => node.children[2].at_css('a').text.sub(/\n\s+/, ''),
       :price => node.children[4].text.scan(/\d+/).join.to_i,
-      :bid => node.children[8].text,
-      :end => node.children[10].text
+      :bid => node.children[8].text.to_i,
+      :end_time => node.children[10].text
     }
   end
 

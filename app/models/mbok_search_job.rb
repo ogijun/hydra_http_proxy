@@ -19,12 +19,12 @@ class MbokSearchJob < AbstractJob
 
   def self.extract_row node
     {
-      :text => node.at_css('.title').text,
+      :auction_id => node.css('a')[1]['href'].scan(/\d+/).first.to_i,
       :url => node.css('a')[1]['href'],
+      :title => node.at_css('.title').text,
       :seller => node.css('a')[2].text,
       :price => node.at_css('.li_price').text,
-      :bid => node.at_css('.li_bid').text,
-      :time => node.at_css('.li_time').text,
+      :end_time => node.at_css('.li_time').text,
       :bid => node.at_css('.li_bid').text,
       :img => node.at_css('.imgbox img')['src'],
     }

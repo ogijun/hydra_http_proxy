@@ -15,8 +15,22 @@ class YahooSearchJob < AbstractJob
     data = JSON.parse(body.sub(/^loaded\(/, '').sub(/\)$/, ''))
     require 'pp'
     data_ = data['ResultSet']
-    pp data_['Result']['Item'],
-    { :list => data_['Result']['Item'], :count => data_['@attributes']['totalResultsAvailable'].to_i }
+    pp data_['Result']['Item']
+    list = data_['Result']['Item'].map { |item| extract_row item }
+    { :list => list, :count => data_['@attributes']['totalResultsAvailable'].to_i }
+  end
+
+  def self.extract_row item
+    {
+      :auction_id => item['AuctionID'],
+      :url => item['ItemUrl'],
+      :title => item['Title'],
+      :seller => item['Seller']['Id'],
+      :price => item['CurrentPrice'].to_i,
+      :end_time => item['EndTime'],
+      :bid => item['Bids'].to_i,
+      :img => item['Image']
+    }
   end
 
 end
