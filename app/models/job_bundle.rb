@@ -20,7 +20,7 @@ class JobBundle
 
   def morph
     morphed_jobs = jobs.map { |job| job.morph }
-    data = { "bundle" => morphed_jobs }
+    data = { "bundles" => morphed_jobs }
     JobBundle.new data, morphed_jobs
   end
 
@@ -33,7 +33,7 @@ class JobBundle
   end
 
   def to_json
-    { "bundle" => jobs.map(&:params) }.to_json
+    { "bundles" => jobs.map(&:params) }.to_json
   end
 
 end
