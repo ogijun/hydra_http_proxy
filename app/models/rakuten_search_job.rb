@@ -29,7 +29,7 @@ class RakutenSearchJob < AbstractJob
       :title => node.children[2].at_css('a').text.sub(/\n\s+/, ''),
       :price => node.children[4].text.scan(/\d+/).join.to_i,
       :bid => node.children[8].text.to_i,
-      :end_time => node.children[10].text
+      :rest_time => node.children[10].text
     }
   end
 
