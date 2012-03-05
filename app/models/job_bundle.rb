@@ -11,7 +11,7 @@ class JobBundle
   end
 
   def jobs
-    @jobs ||= @bundle_data["bundles"].map { |job| AbstractJob.build job }
+    @jobs ||= @bundle_data["bundle"].map { |job| AbstractJob.build job }
   end
 
   def fixed?
@@ -20,7 +20,7 @@ class JobBundle
 
   def morph
     morphed_jobs = jobs.map { |job| job.morph }
-    data = { "bundles" => morphed_jobs }
+    data = { "bundle" => morphed_jobs }
     JobBundle.new data, morphed_jobs
   end
 
@@ -33,7 +33,7 @@ class JobBundle
   end
 
   def to_json
-    { "bundles" => jobs.map(&:params) }.to_json
+    { "bundle" => jobs.map(&:params) }.to_json
   end
 
 end

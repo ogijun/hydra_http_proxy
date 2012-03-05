@@ -29,7 +29,7 @@ class JobBundleController < ApplicationController
     else
       b = JSON.parse(bj)
       job_results = []
-      b["bundles"].each do |job|
+      b["bundle"].each do |job|
         file = HtmlFile.by_url(job["url"]).first
         job_filter = job["filter"]
         if job_filter.blank? or  job_filter == 'ident'
