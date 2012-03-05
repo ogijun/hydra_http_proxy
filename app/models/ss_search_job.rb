@@ -6,7 +6,8 @@ class SsSearchJob < AbstractJob
   def ss_url
     opt = params['options']
     base = 'http://aucfan.search.zero-start.jp/shumaru/item_search2.cgi'
-    "#{base}?search=#{opt['q']}&ipp=30&page=#{opt['page']}&ym=#{opt['ym']}&#{opt['s']}"
+    q = opt["q"].join(" ")
+    "#{base}?search=#{q}&ipp=30&page=#{opt['page']}&ym=#{opt['ym']}&#{opt['s']}"
   end
 
   def self.extract body

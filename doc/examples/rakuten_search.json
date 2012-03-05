@@ -4,7 +4,7 @@
         {
             "job_type": "ra_search",
             "options": {
-                "q": "rolex",
+                "q": ["rolex"],
                 "page": 2
             }
         }

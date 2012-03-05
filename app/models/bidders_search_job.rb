@@ -5,12 +5,12 @@ class BiddersSearchJob < AbstractJob
 
   def bidders_url
     opt = params['options']
-    search_keyword_e_sjis = opt['q']
+    q = opt["q"].join(" ")
     minprice = nil
     maxprice = nil
     page = opt['page']
     base = 'http://www.bidders.co.jp/dap/sv/list1'
-     "#{base}?ut=&sort=#{sort_option_bidders}&categ_id=#{opt['c']}&cf=N&srm=Y&spec_keyword=#{search_keyword_e_sjis}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
+     "#{base}?ut=&sort=#{sort_option_bidders}&categ_id=#{opt['c']}&cf=N&srm=Y&spec_keyword=#{q}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
   end
 
   def sort_option_bidders

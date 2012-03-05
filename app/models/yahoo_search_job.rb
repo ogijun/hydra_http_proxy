@@ -7,7 +7,8 @@ class YahooSearchJob < AbstractJob
     opt = params['options']
     appid = 'xqc6gaa0'
     base = 'http://auctions.yahooapis.jp/AuctionWebService/V2/json/search'
-    "#{base}?appid=#{appid}&query=#{opt['q']}"
+    q = opt["q"].join(" ")
+    "#{base}?appid=#{appid}&query=#{q}"
   end
 
   def self.extract body
