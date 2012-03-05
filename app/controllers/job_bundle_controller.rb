@@ -42,6 +42,8 @@ class JobBundleController < ApplicationController
           result = { :content => BiddersItemJob.extract(file.body) }
         elsif job_filter == 'bidders_search'
           result = { :content => BiddersSearchJob.extract(file.body) }
+        elsif job_filter == 'yahoo_item'
+          result = { :content => YahooItemJob.extract(file.body) }
         elsif job_filter == 'yahoo_search'
           result = { :content => YahooSearchJob.extract(file.body) }
         elsif job_filter == 'rakuten_search'

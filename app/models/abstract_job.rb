@@ -11,6 +11,8 @@ class AbstractJob
       BiddersItemJob.new params
     when /bi_search/
       BiddersSearchJob.new params
+    when /ya_item/
+      YahooItemJob.new params
     when /ya_search/
       YahooSearchJob.new params
     when /ra_search/
