@@ -32,26 +32,7 @@ class JobBundleController < ApplicationController
       b["bundle"].each do |job|
         file = HtmlFile.by_url(job["url"]).first
         job_filter = job["filter"]
-        if job_filter.blank? or  job_filter == 'ident'
-          result = file.body
-        elsif job_filter == 'mbok_item'
-          result = { :content => MbokItemJob.extract(file.body) }
-        elsif job_filter == 'mbok_search'
-          result = { :content => MbokSearchJob.extract(file.body) }
-        elsif job_filter == 'bidders_item'
-          result = { :content => BiddersItemJob.extract(file.body) }
-        elsif job_filter == 'bidders_search'
-          result = { :content => BiddersSearchJob.extract(file.body) }
-        elsif job_filter == 'yahoo_item'
-          result = { :content => YahooItemJob.extract(file.body) }
-        elsif job_filter == 'yahoo_search'
-          result = { :content => YahooSearchJob.extract(file.body) }
-        elsif job_filter == 'rakuten_search'
-          result = { :content => RakutenSearchJob.extract(file.body) }
-        elsif job_filter == 'ss_search'
-          result = { :content => SsSearchJob.extract(file.body) }
-        else
-        end
+        result = JobBundle.filter_result file.body, job_filter
         job_results.push({ :request => job, :result => result })
       end
       headers["Content-Type"] ||= 'application/json'

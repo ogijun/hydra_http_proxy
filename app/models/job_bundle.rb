@@ -1,5 +1,29 @@
 class JobBundle
 
+  def self.filter_result body, job_filter
+    if job_filter.blank? or  job_filter == 'ident'
+      body
+    elsif job_filter == 'mbok_item'
+      { :content => MbokItemJob.extract(body) }
+    elsif job_filter == 'mbok_search'
+      { :content => MbokSearchJob.extract(body) }
+    elsif job_filter == 'bidders_item'
+      { :content => BiddersItemJob.extract(body) }
+    elsif job_filter == 'bidders_search'
+      { :content => BiddersSearchJob.extract(body) }
+    elsif job_filter == 'yahoo_item'
+      { :content => YahooItemJob.extract(body) }
+    elsif job_filter == 'yahoo_search'
+      { :content => YahooSearchJob.extract(body) }
+    elsif job_filter == 'rakuten_search'
+      { :content => RakutenSearchJob.extract(body) }
+    elsif job_filter == 'ss_search'
+      { :content => SsSearchJob.extract(body) }
+    else
+      nil
+    end
+  end
+
   def initialize bundle_data, jobs = nil
     @bundle_data = bundle_data
     @jobs = jobs
