@@ -38,6 +38,8 @@ class JobBundleController < ApplicationController
           result = { :content => MbokItemJob.extract(file.body) }
         elsif job_filter == 'mbok_search'
           result = { :content => MbokSearchJob.extract(file.body) }
+        elsif job_filter == 'bidders_item'
+          result = { :content => BiddersItemJob.extract(file.body) }
         elsif job_filter == 'bidders_search'
           result = { :content => BiddersSearchJob.extract(file.body) }
         elsif job_filter == 'yahoo_search'
@@ -50,7 +52,7 @@ class JobBundleController < ApplicationController
         end
         job_results.push({ :request => job, :result => result })
       end
-      headers["Content-Type"] ||= 'text/json'
+      headers["Content-Type"] ||= 'application/json'
       render :text => job_results.to_json
     end
   end

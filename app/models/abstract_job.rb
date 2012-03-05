@@ -7,6 +7,8 @@ class AbstractJob
       MbokItemJob.new params
     when /mo_search/
       MbokSearchJob.new params
+    when /bi_item/
+      BiddersItemJob.new params
     when /bi_search/
       BiddersSearchJob.new params
     when /ya_search/
