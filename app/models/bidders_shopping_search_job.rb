@@ -1,4 +1,4 @@
-class BiddersSearchJob < AbstractJob
+class BiddersShoppingSearchJob < AbstractJob
   def morph
     GetApplyJob.new params.merge(:url => bidders_url, :filter => 'bidders_search')
   end
@@ -9,8 +9,8 @@ class BiddersSearchJob < AbstractJob
     minprice = nil
     maxprice = nil
     page = opt['page']
-    base = 'http://www.bidders.co.jp/dap/sv/lista1'
-    "#{base}?ut=&sort=#{sort_option_bidders}&categ_id=#{opt['c']}&cf=N&srm=Y&keyword=#{q}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
+    base = 'http://www.bidders.co.jp/dap/sv/lists1'
+     "#{base}?ut=&sort=#{sort_option_bidders}&categ_id=#{opt['c']}&cf=N&srm=Y&keyword=#{q}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
   end
 
   def sort_option_bidders

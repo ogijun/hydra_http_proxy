@@ -1,0 +1,3 @@
+class AmazonSearchJob < AbstractJob
+  
+end

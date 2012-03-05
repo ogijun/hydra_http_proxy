@@ -30,6 +30,7 @@ class JobBundleController < ApplicationController
       b = JSON.parse(bj)
       job_results = []
       b["bundle"].each do |job|
+        pp job
         file = HtmlFile.by_url(job["url"]).first
         job_filter = job["filter"]
         result = JobBundle.filter_result file.body, job_filter

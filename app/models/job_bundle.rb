@@ -11,12 +11,20 @@ class JobBundle
       { :content => BiddersItemJob.extract(body) }
     elsif job_filter == 'bidders_search'
       { :content => BiddersSearchJob.extract(body) }
+    elsif job_filter == 'bidders_shopping_search'
+      { :content => BiddersShoppingSearchJob.extract(body) }
     elsif job_filter == 'yahoo_item'
       { :content => YahooItemJob.extract(body) }
     elsif job_filter == 'yahoo_search'
       { :content => YahooSearchJob.extract(body) }
+    elsif job_filter == 'yahoo_shopping_search'
+      { :content => YahooShoppingSearchJob.extract(body) }
     elsif job_filter == 'rakuten_search'
       { :content => RakutenSearchJob.extract(body) }
+    elsif job_filter == 'rakuten_ichiba_search'
+      { :content => RakutenIchibaSearchJob.extract(body) }
+    elsif job_filter == 'amazon_search'
+      { :content => AmazonSearchJob.extract(body) }
     elsif job_filter == 'ss_search'
       { :content => SsSearchJob.extract(body) }
     else
