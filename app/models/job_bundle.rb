@@ -11,7 +11,7 @@ class JobBundle
   end
 
   def jobs
-    @jobs ||= @bundle_data["bundle"].map { |job| AbstractJob.build job }
+    @jobs ||= @bundle_data["bundles"].map { |job| AbstractJob.build job }
   end
 
   def fixed?
