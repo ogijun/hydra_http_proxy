@@ -7,10 +7,9 @@ class YahooShoppingSearchJob < AbstractJob
     opt = params[:options]
     appid = 'xqc6gaa0'
     base = 'http://shopping.yahooapis.jp/ShoppingWebService/V1/json/itemSearch'
-    q = opt[:q].join(' ')
     page = (opt['p'] || 1).to_i
     offset = (page - 1)*30
-    "#{base}?appid=#{appid}&query=#{q}&hits=30&offset=#{offset}"
+    "#{base}?appid=#{appid}&query=#{query}&hits=30&offset=#{offset}"
   end
 
 
@@ -28,7 +27,8 @@ class YahooShoppingSearchJob < AbstractJob
       :url => item["Url"],
       :picture => item["Image"]["Medium"],
       :thumb => item["Image"]["Small"],
-      :price => item["Price"]["_value"].to_i
+      :price => item["Price"]["_value"].to_i,
+      :point => item["Point"]["Amount"].to_i
     }
   end
 
