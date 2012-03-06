@@ -1,16 +1,21 @@
 class BiddersShoppingSearchJob < AbstractJob
+
+  def initialize params
+    super
+    @query_encoding = 'Shift_JIS'
+  end
+
   def morph
     GetApplyJob.new params.merge(:url => bidders_url, :filter => 'bidders_search')
   end
 
   def bidders_url
-    opt = params['options']
-    q = opt["q"].join(" ")
+    opt = params[:options]
     minprice = nil
     maxprice = nil
-    page = opt['page']
+    page = opt[:page]
     base = 'http://www.bidders.co.jp/dap/sv/lists1'
-     "#{base}?ut=&sort=#{sort_option_bidders}&categ_id=#{opt['c']}&cf=N&srm=Y&keyword=#{q}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
+     "#{base}?ut=&sort=#{sort_option_bidders}&categ_id=#{opt['c']}&cf=N&srm=Y&keyword=#{query}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
   end
 
   def sort_option_bidders

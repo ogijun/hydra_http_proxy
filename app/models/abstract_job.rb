@@ -1,5 +1,6 @@
 class AbstractJob
   attr_reader :params
+  attr_reader :query_encoding
 
   def self.build params
     case params["job_type"]
@@ -33,15 +34,19 @@ class AbstractJob
   end
 
   def initialize params
-    @params = params
+    @params = params.with_indifferent_access
   end
 
   def [] at
-    @params[at]
+    params[at]
   end
 
   def morph
     self
+  end
+
+  def query
+    URI.escape(params[:options][:q].join(' ').encode(query_encoding || 'UTF-8'))
   end
 
   def to_json

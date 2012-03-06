@@ -4,7 +4,7 @@
         {
             "job_type": "bi_search",
             "options": {
-                "q": ["rolex"],
+                "q": ["\u3010ROLEX\u3011"],
                 "page": 2
             }
         }

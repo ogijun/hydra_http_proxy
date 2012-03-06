@@ -1,16 +1,21 @@
 class BiddersSearchJob < AbstractJob
+
+  def initialize params
+    super
+    @query_encoding = 'Shift_JIS'
+  end
+
   def morph
     GetApplyJob.new params.merge(:url => bidders_url, :filter => 'bidders_search')
   end
 
   def bidders_url
-    opt = params['options']
-    q = opt["q"].join(" ")
+    opt = params[:options]
     minprice = nil
     maxprice = nil
-    page = opt['page']
+    page = opt[:page]
     base = 'http://www.bidders.co.jp/dap/sv/lista1'
-    "#{base}?ut=&sort=#{sort_option_bidders}&categ_id=#{opt['c']}&cf=N&srm=Y&keyword=#{q}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
+    "#{base}?ut=&sort=#{sort_option_bidders}&categ_id=#{opt['c']}&cf=N&srm=Y&keyword=#{query}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
   end
 
   def sort_option_bidders
@@ -21,7 +26,7 @@ class BiddersSearchJob < AbstractJob
   def self.extract body
     doc = Nokogiri::HTML(body)
     all_table_nodes = doc.css('table')
-    list_nodes = all_table_nodes.find { |node| node.css('table').length == 40 }
+    list_nodes = all_table_nodes[18]
     list = list_nodes.children[3, 80].each_slice(2).map { |node, dum| extract_row node }
     count = all_table_nodes.at_css('.text12 .white b').text.scan(/\d+/).join.to_i
     { :list => list, :count => count }

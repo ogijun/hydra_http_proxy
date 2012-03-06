@@ -1,12 +1,18 @@
 class MbokSearchJob < AbstractJob
+
+  def initialize params
+    super
+    @query_encoding = 'Shift_JIS'
+  end
+
   def morph
     GetApplyJob.new params.merge(:url => mbok_url, :filter => 'mbok_search')
   end
 
   def mbok_url
-    opt = params['options']
-    q = opt["q"].join(" ")
-    "http://www.mbok.jp/_l?q=#{q}&p=#{opt["page"]}"
+    opt = params[:options]
+    q = opt[:q].join(" ")
+    "http://www.mbok.jp/_l?q=#{q}&p=#{opt[:page]}"
   end
 
   require 'nokogiri'

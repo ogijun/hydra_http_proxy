@@ -4,18 +4,16 @@ class YahooSearchJob < AbstractJob
   end
 
   def yahoo_url
-    opt = params['options']
+    opt = params[:options]
     appid = 'xqc6gaa0'
     base = 'http://auctions.yahooapis.jp/AuctionWebService/V2/json/search'
-    q = opt["q"].join(" ")
+    q = opt[:q].join(" ")
     "#{base}?appid=#{appid}&query=#{q}"
   end
 
   def self.extract body
     data = JSON.parse(body.sub(/^loaded\(/, '').sub(/\)$/, ''))
-    require 'pp'
     data_ = data['ResultSet']
-    pp data_['Result']['Item']
     list = data_['Result']['Item'].map { |item| extract_row item }
     { :list => list, :count => data_['@attributes']['totalResultsAvailable'].to_i }
   end

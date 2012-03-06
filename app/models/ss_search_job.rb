@@ -1,14 +1,20 @@
 class SsSearchJob < AbstractJob
+
+  def initialize params
+    super
+    @query_encoding = 'EUC-JP'
+  end
+
   def morph
     GetApplyJob.new params.merge(:url => ss_url, :filter => 'ss_search')
   end
 
   def ss_url
-    opt = params['options']
+    opt = params[:options]
     base = 'http://aucfan.search.zero-start.jp/shumaru/item_search2.cgi'
-    q = opt["q"].join(" ")
+    q = opt[:q].join(" ")
     ym = 201111 || opt['ym']
-    "#{base}?search=#{q}&ipp=30&page=#{opt['page']}&ym=#{ym}&#{opt['s']}"
+    "#{base}?search=#{q}&ipp=30&page=#{opt[:page]}&ym=#{ym}&#{opt['s']}"
   end
 
   def self.extract body
