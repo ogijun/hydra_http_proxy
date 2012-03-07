@@ -49,6 +49,14 @@ class AbstractJob
     URI.escape(params[:options][:q].join(' ').encode(query_encoding || 'UTF-8'))
   end
 
+  def sort
+    nil
+  end
+
+  def category
+    nil
+  end
+
   def to_json
     params.to_json
   end

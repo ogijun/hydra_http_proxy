@@ -6,7 +6,11 @@ class RakutenIchibaSearchJob < AbstractJob
   def rakuten_url
     opt = params[:options]
     base = "http://api.rakuten.co.jp/rws/3.0/json"
-    "#{base}?developerId=d5f4a97417295ca07079b1574ad910f1&operation=ItemSearch&version=2010-09-15&keyword=#{query}&sort=-reviewCount"
+    "#{base}?developerId=d5f4a97417295ca07079b1574ad910f1&operation=ItemSearch&version=2010-09-15&keyword=#{query}&sort=#{sort}"
+  end
+
+  def sort
+    '-reviewCount'
   end
 
   def self.extract body

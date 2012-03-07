@@ -7,7 +7,17 @@ class YahooSearchJob < AbstractJob
     opt = params[:options]
     appid = 'xqc6gaa0'
     base = 'http://auctions.yahooapis.jp/AuctionWebService/V2/json/search'
-    "#{base}?appid=#{appid}&query=#{query}"
+    page = (opt['p'] || 1).to_i
+    offset = (page - 1)*30
+    "#{base}?appid=#{appid}&query=#{query}&hits=30&offset=#{offset}&sort=#{sort}&order=d"
+  end
+
+  def sort
+    "bids"
+  end
+
+  def category
+    ''
   end
 
   def self.extract body

@@ -15,10 +15,10 @@ class BiddersShoppingSearchJob < AbstractJob
     maxprice = nil
     page = opt[:page]
     base = 'http://www.bidders.co.jp/dap/sv/lists1'
-     "#{base}?ut=&sort=#{sort_option_bidders}&categ_id=#{opt['c']}&cf=N&srm=Y&keyword=#{query}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
+     "#{base}?ut=&sort=#{sort}&categ_id=#{category}&cf=N&srm=Y&keyword=#{query}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
   end
 
-  def sort_option_bidders
+  def sort
     "sort=end,A"
   end
 

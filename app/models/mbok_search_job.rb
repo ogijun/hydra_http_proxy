@@ -11,8 +11,16 @@ class MbokSearchJob < AbstractJob
 
   def mbok_url
     opt = params[:options]
-    q = opt[:q].join(" ")
-    "http://www.mbok.jp/_l?q=#{q}&p=#{opt[:page]}"
+    page = opt[:page]
+    "http://www.mbok.jp/_l?q=#{query}&p=#{page}"
+  end
+
+  def sort
+    ''
+  end
+
+  def category
+    ''
   end
 
   require 'nokogiri'
