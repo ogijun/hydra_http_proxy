@@ -12,7 +12,11 @@ class MbokSearchJob < AbstractJob
   def mbok_url
     opt = params[:options]
     page = opt[:page]
-    "http://www.mbok.jp/_l?q=#{query}&p=#{page}"
+    new_params = {
+      :q => query,
+      :p => page
+    }
+    "http://www.mbok.jp/_l?#{new_params.to_query}"
   end
 
   def sort

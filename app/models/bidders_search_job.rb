@@ -15,7 +15,19 @@ class BiddersSearchJob < AbstractJob
     maxprice = nil
     page = opt[:page]
     base = 'http://www.bidders.co.jp/dap/sv/lista1'
-    "#{base}?ut=&sort=#{sort}&categ_id=#{category}&cf=N&srm=Y&keyword=#{query}&clow=#{minprice}&chigh=#{maxprice}&at=NO%2CPA%2CFL&page=#{page}"
+    new_params = {
+      :ut => '',
+      :sort => sort,
+      :categ_id => category,
+      :cf => "N",
+      :srm => "Y",
+      :keyword => query,
+      :clow => minprice,
+      :chigh => maxprice,
+      :at => "NO,PA,FL",
+      :page => page
+    }
+    "#{base}?#{new_params.to_query}"
   end
 
   def sort

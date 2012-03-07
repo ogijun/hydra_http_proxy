@@ -12,9 +12,15 @@ class SsSearchJob < AbstractJob
   def ss_url
     opt = params[:options]
     base = 'http://aucfan.search.zero-start.jp/shumaru/item_search2.cgi'
-    q = opt[:q].join(" ")
     ym = 201111 || opt['ym']
-    "#{base}?search=#{q}&ipp=30&page=#{opt[:page]}&ym=#{ym}&#{opt['s']}"
+    new_params = {
+      :search => query,
+      :ipp => 30,
+      :page => opt[:page],
+      :ym => ym,
+      opt[:s] => nil
+    }
+    "#{base}?#{new_params.to_query}"
   end
 
   def self.extract body

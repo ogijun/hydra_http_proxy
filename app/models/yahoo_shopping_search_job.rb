@@ -7,9 +7,15 @@ class YahooShoppingSearchJob < AbstractJob
     opt = params[:options]
     appid = 'xqc6gaa0'
     base = 'http://shopping.yahooapis.jp/ShoppingWebService/V1/json/itemSearch'
-    page = (opt['p'] || 1).to_i
+    page = (opt[:page] || 1).to_i
     offset = (page - 1)*30
-    "#{base}?appid=#{appid}&query=#{query}&hits=30&offset=#{offset}"
+    new_params = {
+      :appid => appid,
+      :query => query,
+      :hits => 30,
+      :offset => offset
+    }
+    "#{base}?#{new_params.to_query}"
   end
 
 

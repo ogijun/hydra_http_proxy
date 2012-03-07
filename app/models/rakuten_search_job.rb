@@ -15,7 +15,22 @@ class RakutenSearchJob < AbstractJob
     page = opt[:page].to_i
     g = 1050000000
     s = 3
-    "#{base}?sv=13&f=A&g=#{g}&v=2&e=0&p=#{page}&s=#{s}&oid=000&sub=1&k=0&sf=1&sitem=#{query}&x=0"
+    new_params = {
+      :sv => 13,
+      :s => 'A',
+      :g => g,
+      :v => 2,
+      :e => 0,
+      :p => page,
+      :s => s,
+      :oid => '000',
+      :sub => 1,
+      :k => 0,
+      :sf => 1,
+      :sitem => query,
+      :x => 0
+    }
+    "#{base}?#{exix}"
   end
 
   require 'nokogiri'
