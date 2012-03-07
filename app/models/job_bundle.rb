@@ -1,4 +1,16 @@
 class JobBundle
+  require 'digest/md5'
+
+  def self.get_result data
+    job_results = []
+    data["bundle"].each do |job|
+      file = HtmlFile.by_url(job["url"]).first
+      job_filter = job["filter"]
+      result = filter_result file.body, job_filter
+      job_results.push({ :request => job, :result => result })
+    end
+    job_results
+  end
 
   def self.filter_result body, job_filter
     if job_filter.blank? or  job_filter == 'ident'
@@ -62,6 +74,14 @@ class JobBundle
 
   def enqueue
     Resque.enqueue(GetRequestsJob, self.to_json)
+  end
+
+  def save redis
+    value = self.to_json
+    key = Digest::MD5.hexdigest(value)
+    redis.set("get_req:#{key}", value)
+    redis.expire("get_req:#{key}", 3600)
+    key
   end
 
   def to_json

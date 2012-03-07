@@ -2,7 +2,7 @@
     "bundle":
     [
         {
-            "job_type": "ra_search",
+            "job_type": "rai_search",
             "options": {
                 "q": ["rolex"],
                 "page": 2
