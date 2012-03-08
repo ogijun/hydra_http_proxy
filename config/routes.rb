@@ -56,6 +56,10 @@ GetMock::Application.routes.draw do
   match 'get_result', :controller => 'order_sheet', :action => 'get_result'
   match 'put_and_get', :controller => 'order_sheet', :action => 'put_and_get'
 
+  get "console/index"
+  get "console/put_bundle"
+  get "console/get_result"
+
   # See how all your routes lay out with "rake routes"
 
   mount Resque::Server.new, :at => "/resque"
