@@ -1,0 +1,12 @@
+{
+    "bundle":
+    [
+        {
+            "job_type": "am_search",
+            "options": {
+                "q": ["GUNDAM"],
+                "page": 1
+            }
+        }
+    ]
+}
