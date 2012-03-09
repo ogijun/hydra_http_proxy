@@ -1,11 +1,6 @@
 <h1>Debug Console</h1>
+<%= render :partial => 'form' %>
 
-<%= form_tag '/console/', :method => :post do %>
-  <p>
-    <%= label :data, :job_bundle_text %><br />
-    <%= text_area :data, :job_bundle_text %>
-  </p>
-  <p>
-    <%= submit_tag 'Send' %>
-  </p>
-<% end %>
+<%= params %>
+
+<%= put_bundle_url(:only_path => false) %>

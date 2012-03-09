@@ -1,2 +1,21 @@
-<h1>Console#put_bundle</h1>
-<p>Find me in app/views/console/put_bundle.html.erb</p>
+<h1>Debug Console</h1>
+<%= render :partial => 'form' %>
+
+<div>
+    <%= params %>
+</div>
+
+<div>
+    <%= @json %>
+</div>
+
+<div>
+    <%= @data %>
+</div>
+
+<div>
+    <%= @saved_key %>
+</div>
+<% if @saved_key.present? %>
+    <%= link_to "Get Result", get_bundle_result_path(:id => @saved_key) %>
+<% end %>
