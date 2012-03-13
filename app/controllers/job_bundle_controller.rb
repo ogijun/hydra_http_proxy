@@ -7,9 +7,9 @@ class JobBundleController < ApplicationController
       job_bundle = JobBundle.new decoded
       morphed = job_bundle.morph
       morphed.enqueue
+      logger.debug morphed.inspect
       saved_key = morphed.save $redis
       render :text => saved_key
-      logger.debug morphed.inspect
     rescue JSON::ParserError => e
       logger.debug e
       render :text => 'Not JSON'
