@@ -1,4 +1,4 @@
-class SsSearchJob < AbstractJob
+class AucfanSearchJob < AbstractJob
 
   def initialize params
     super
@@ -6,10 +6,10 @@ class SsSearchJob < AbstractJob
   end
 
   def morph
-    GetApplyJob.new params.merge(:url => ss_url, :filter => 'ss_search')
+    GetApplyJob.new params.merge(:url => aucfan_url, :filter => 'afn_search')
   end
 
-  def ss_url
+  def aucfan_url
     opt = params[:options]
     base = 'http://aucfan.search.zero-start.jp/shumaru/item_search2.cgi'
     ym = 201111 || opt['ym']

@@ -26,8 +26,10 @@ class AbstractJob
       RakutenIchibaSearchJob.new params
     when /am_search/
       AmazonSearchJob.new params
-    when /ss_search/
-      SsSearchJob.new params
+    when /afn_search/
+      AucfanSearchJob.new params
+    when /afn_item/
+      AucfanItemJob.new params
     else
       self.new params
     end
