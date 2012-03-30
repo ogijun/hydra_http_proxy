@@ -2,7 +2,7 @@
     "bundle":
     [
         {
-            "job_type": "ss_search",
+            "job_type": "afn_search",
             "options": {
                 "q": ["rolex"],
                 "page": 1,

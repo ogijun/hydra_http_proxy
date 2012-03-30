@@ -15,6 +15,10 @@ class JobBundle
   def self.filter_result body, job_filter
     if job_filter.blank? or  job_filter == 'ident'
       body
+    elsif job_filter == 'afn_item'
+      { :content => AucfanItemJob.extract(body) }
+    elsif job_filter == 'afn_search'
+      { :content => AucfanSearchJob.extract(body) }
     elsif job_filter == 'mbok_item'
       { :content => MbokItemJob.extract(body) }
     elsif job_filter == 'mbok_search'
@@ -37,8 +41,6 @@ class JobBundle
       { :content => RakutenIchibaSearchJob.extract(body) }
     elsif job_filter == 'amazon_search'
       { :content => AmazonSearchJob.extract(body) }
-    elsif job_filter == 'ss_search'
-      { :content => SsSearchJob.extract(body) }
     else
       nil
     end
