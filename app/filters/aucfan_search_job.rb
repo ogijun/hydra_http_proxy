@@ -12,7 +12,7 @@ class AucfanSearchJob < AbstractJob
   def aucfan_url
     opt = params[:options]
     base = 'http://aucfan.search.zero-start.jp/shumaru/item_search2.cgi'
-    ym = 201111 || opt['ym']
+    ym = opt['ym']
     new_params = {
       :search => query,
       :ipp => 30,
