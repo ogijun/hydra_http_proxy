@@ -16,6 +16,7 @@ class AucfanSearchJob < AbstractJob
     new_params = {
       :search => query,
       :ipp => 30,
+      :c_ya => opt[:c_ya],
       :page => opt[:page],
       :ym => ym,
       opt[:s] => ''
@@ -32,12 +33,14 @@ class AucfanSearchJob < AbstractJob
       unless row =~ /^<\/html>/
         cols = row.split "\t"
         item = {
+          :auction_id => (auction_id = cols[4]),
           :site => site,
           :title => cols[5],
           :bid => cols[0],
           :price => cols[1],
           :end => cols[3],
-          :auction_id => cols[4]
+          :end_date => (end_date = Time.at(cols[3].to_i).strftime('%Y%m%d')),
+          :img => "http://aucfan.com/item_data/thumbnail/#{end_date}/yahoo/#{auction_id[0]}/#{auction_id}.jpg"
         }
         list.push item
       end
