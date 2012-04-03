@@ -33,11 +33,11 @@ class AucfanSearchJob < AbstractJob
         cols = row.split "\t"
         item = {
           :site => site,
-          :title => cols[4],
+          :title => cols[5],
           :bid => cols[0],
           :price => cols[1],
-          :end => cols[2],
-          :auction_id => cols[3]
+          :end => cols[3],
+          :auction_id => cols[4]
         }
         list.push item
       end
