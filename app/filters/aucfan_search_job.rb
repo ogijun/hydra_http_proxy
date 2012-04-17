@@ -39,7 +39,7 @@ class AucfanSearchJob < AbstractJob
           :bid => cols[0],
           :price => cols[1],
           :end_time => cols[3],
-          :end_date => (end_date = Time.at(cols[3].to_i).strftime('%Y%m%d')),
+          :end_date => (end_date = Time.at(cols[3].to_i - 15*3600).strftime('%Y%m%d')),
           :img => "http://aucfan.com/item_data/thumbnail/#{end_date}/yahoo/#{auction_id[0]}/#{auction_id}.jpg"
         }
         list.push item
