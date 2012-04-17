@@ -30,7 +30,7 @@ class RakutenSearchJob < AbstractJob
       :sitem => query,
       :x => 0
     }
-    "#{base}?#{exix}"
+    "#{base}?#{new_params.to_query}"
   end
 
   require 'nokogiri'
