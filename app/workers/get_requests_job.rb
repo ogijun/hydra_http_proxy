@@ -4,7 +4,9 @@ class GetRequestsJob
 
   def self.perform(data)
     begin
-      urls = JSON.parse(data)["bundle"].map{ |a| a['url'] }
+      bundle = JSON.parse(data)["bundle"]
+      pp bundle
+      urls = bundle.map{ |a| a['url'] }
       requests = urls.map { |url| rrr url }
       responses = rrrr requests
       wwww responses
