@@ -5,8 +5,9 @@ class JobBundle
     job_results = []
     data["bundle"].each do |job|
       file = HtmlFile.by_url(job["url"]).first
+      file_body = file.try(:body)
       job_filter = job["filter"]
-      result = filter_result file.body, job_filter
+      result = filter_result file_body, job_filter
       job_results.push({ :request => job, :result => result })
     end
     job_results
