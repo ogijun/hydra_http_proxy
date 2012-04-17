@@ -42,6 +42,10 @@ class JobBundle
       { :content => RakutenIchibaSearchJob.extract(body) }
     elsif job_filter == 'amazon_search'
       { :content => AmazonSearchJob.extract(body) }
+    elsif job_filter == 'sekaimon_search'
+      { :content => SekaimonSearchJob.extract(body) }
+    elsif job_filter == 'taobao_search'
+      { :content => TaobaoSearchJob.extract(body) }
     else
       nil
     end

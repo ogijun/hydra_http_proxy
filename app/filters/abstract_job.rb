@@ -26,6 +26,10 @@ class AbstractJob
       RakutenIchibaSearchJob.new params
     when /am_search/
       AmazonSearchJob.new params
+    when /sm_search/
+      SekaimonSearchJob.new params
+    when /tb_search/
+      TaobaoSearchJob.new params
     when /afn_search/
       AucfanSearchJob.new params
     when /afn_item/
