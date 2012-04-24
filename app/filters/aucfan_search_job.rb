@@ -19,6 +19,7 @@ class AucfanSearchJob < AbstractJob
       :c_ya => opt[:c_ya],
       :page => opt[:page],
       :ym => ym,
+      :ya => '',
       opt[:s] => ''
     }
     "#{base}?#{new_params.to_query}"
