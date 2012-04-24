@@ -35,6 +35,9 @@ class AucfanSearchJob < AbstractJob
         cols = row.split "\t"
         item = {
           :auction_id => (auction_id = cols[4]),
+          :aucview_url => "/aucview/yahoo/#{auction_id}",
+          :url => (url = "http://auctions.yahoo.co.jp/auction/#{auction_id}"),
+          :affiliate_url => url,
           :site => site,
           :title => cols[5],
           :bid => cols[0],
