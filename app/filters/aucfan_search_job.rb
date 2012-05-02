@@ -25,7 +25,40 @@ class AucfanSearchJob < AbstractJob
     "#{base}?#{new_params.to_query}"
   end
 
+  def self.page_id aid
+    yahoo_auction_page_id = {
+      'a' => '',
+      'b' => 'page2',
+      'c' => 'page3',
+      'd' => 'page4',
+      'e' => 'page5',
+      'f' => 'page6',
+      'g' => 'page7',
+      'h' => 'page8',
+      'i' => 'koubai',
+      'j' => 'page21',
+      'k' => 'page9',
+      'l' => 'page22',
+      'm' => 'page10',
+      'n' => 'page11',
+      'o' => '',
+      'p' => 'page12',
+      'q' => '',
+      'r' => 'page13',
+      's' => 'page14',
+      't' => 'page15',
+      'u' => 'page16',
+      'v' => 'page17',
+      'w' => 'page18',
+      'x' => 'page19',
+      'y' => 'page20',
+      'z' => ''
+    }
+    yahoo_auction_page_id[aid[0]]
+  end
+
   def self.extract body
+    # FIXME: correct property name
     require 'stringio'
     str = StringIO.new body
     site, count = str.gets.chomp.split(':')
@@ -33,10 +66,12 @@ class AucfanSearchJob < AbstractJob
     str.readlines.each do |row|
       unless row =~ /^<\/html>/
         cols = row.split "\t"
+        auction_id = cols[4]
+        sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
         item = {
-          :auction_id => (auction_id = cols[4]),
+          :auction_id => auction_id,
           :aucview_url => "/aucview/yahoo/#{auction_id}",
-          :url => (url = "http://auctions.yahoo.co.jp/auction/#{auction_id}"),
+          :url => (url = "http://#{sub}auctions.yahoo.co.jp/auction/#{auction_id}"),
           :affiliate_url => url,
           :site => site,
           :title => cols[5],
