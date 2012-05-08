@@ -1,9 +1,9 @@
-class JobBundle
+class OrderSheet
   require 'digest/md5'
 
   def self.get_result data
     job_results = []
-    data["bundle"].each do |job|
+    data["orders"].each do |job|
       file = HtmlFile.by_url(job["url"]).first
       file_body = file.try(:body)
       job_filter = job["filter"]
@@ -51,8 +51,8 @@ class JobBundle
     end
   end
 
-  def initialize bundle_data, jobs = nil
-    @bundle_data = bundle_data
+  def initialize data, jobs = nil
+    @data = data
     @jobs = jobs
     super
   end
@@ -62,7 +62,7 @@ class JobBundle
   end
 
   def jobs
-    @jobs ||= @bundle_data["bundle"].map { |job| AbstractJob.build job }
+    @jobs ||= @data["orders"].map { |job| AbstractJob.build job }
   end
 
   def fixed?
@@ -71,8 +71,8 @@ class JobBundle
 
   def morph
     morphed_jobs = jobs.map { |job| job.morph }
-    data = { "bundle" => morphed_jobs }
-    JobBundle.new data, morphed_jobs
+    data = { "orders" => morphed_jobs }
+    OrderSheet.new data, morphed_jobs
   end
 
   def extract_urls
@@ -92,7 +92,7 @@ class JobBundle
   end
 
   def to_json
-    { "bundle" => jobs.map(&:params) }.to_json
+    { "orders" => jobs.map(&:params) }.to_json
   end
 
 end

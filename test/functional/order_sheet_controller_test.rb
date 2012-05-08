@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class JobBundleControllerTest < ActionController::TestCase
+class OrderSheetControllerTest < ActionController::TestCase
   # test "the truth" do
   #   assert true
   # end

@@ -52,8 +52,8 @@ GetMock::Application.routes.draw do
   # just remember to delete public/index.html.
   # root :to => 'welcome#index'
 
-  match 'put_bundle', :controller => 'job_bundle', :action => 'put'
-  match 'get_bundle_result', :controller => 'job_bundle', :action => 'get_result'
+  match 'put_orders', :controller => 'order_sheet', :action => 'put'
+  match 'get_result', :controller => 'order_sheet', :action => 'get_result'
 
   # See how all your routes lay out with "rake routes"
 

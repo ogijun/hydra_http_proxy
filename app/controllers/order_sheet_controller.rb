@@ -1,11 +1,11 @@
-class JobBundleController < ApplicationController
+class OrderSheetController < ApplicationController
 
   def put
     body = request.body.read
     begin
       decoded = JSON.parse body
-      job_bundle = JobBundle.new decoded
-      morphed = job_bundle.morph
+      order_sheet = OrderSheet.new decoded
+      morphed = order_sheet.morph
       morphed.enqueue
       logger.debug morphed.inspect
       saved_key = morphed.save $redis
@@ -22,7 +22,7 @@ class JobBundleController < ApplicationController
     if bj.blank?
       render :text => 'No Job'
     else
-      job_results = JobBundle.get_result JSON.parse(bj)
+      job_results = OrderSheet.get_result JSON.parse(bj)
       headers["Content-Type"] ||= 'application/json'
       render :text => job_results.to_json
     end
