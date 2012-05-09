@@ -11,8 +11,9 @@ class AucfanSearchJob < AbstractJob
 
   def aucfan_url
     opt = params[:options]
-    base = 'http://aucfan.search.zero-start.jp/api/compat/item_search2.cgi'
-    ym = opt[:ym] || 201202
+    # base = 'http://aucfan.search.zero-start.jp/api/compat/item_search2.cgi'
+    base = 'http://192.168.2.58/shumaru/item_search2.cgi'
+    ym = opt[:ym] # || 201202
     sort = (opt[:sort] || 'date desc').split(/\s/)
 
     new_params = {
@@ -22,7 +23,7 @@ class AucfanSearchJob < AbstractJob
       :page => opt[:page],
       :ym => ym,
       :sort => sort[0],
-      :rev => (sort[1] == 'asc' ? 0 : 1),
+      :rev => (sort[1] == 'desc' ? 0 : 1),
       :ya => '',
       opt[:s] => ''
     }
@@ -80,7 +81,8 @@ class AucfanSearchJob < AbstractJob
           :site => site,
           :title => cols[5],
           :bid => cols[0],
-          :price => cols[1],
+          :start_price => cols[1],
+          :price => cols[2],
           :end_time => cols[3],
           :end_date => (end_date = Time.at(cols[3].to_i - 15*3600).strftime('%Y%m%d')),
           :img => "http://aucfan.com/item_data/thumbnail/#{end_date}/yahoo/#{auction_id[0]}/#{auction_id}.jpg"
