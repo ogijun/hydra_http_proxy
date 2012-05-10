@@ -75,7 +75,7 @@ class AucfanSearchJob < AbstractJob
         sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
         item = {
           :auction_id => auction_id,
-          :aucview_url => "/aucview/yahoo/#{auction_id}",
+          :aucview_url => "/aucview/yahoo/#{auction_id}/",
           :url => (url = "http://#{sub}auctions.yahoo.co.jp/auction/#{auction_id}"),
           :affiliate_url => url,
           :site => site,
