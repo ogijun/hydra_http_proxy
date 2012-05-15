@@ -29,6 +29,8 @@ class YahooSearchJob < AbstractJob
   end
 
   def self.extract body
+    require 'pp'
+    pp :body => body
     data = JSON.parse(body.sub(/^loaded\(/, '').sub(/\)$/, ''))
     data_ = data['ResultSet']
     list = data_['Result']['Item'].map { |item| extract_row item }

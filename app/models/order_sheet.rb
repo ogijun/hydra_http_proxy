@@ -1,10 +1,69 @@
 class OrderSheet
   require 'digest/md5'
 
-  def self.get_result data
+  def self.hydra_run_orders orders
+    hydra_requests = requests_from_orders(orders)
+    hydra_run(hydra_requests)
+  end
+
+  def self.requests_from_orders orders
+    urls = orders.map{ |a| a['url'] }
+    requests = urls.map { |url|
+      Typhoeus::Request.new(
+        url,
+        # :body          => "this is a request body",
+        :method        => :get,
+        # :headers       => {:Accept => "text/html"},
+        :timeout       => 10000, # milliseconds
+        :cache_timeout => 60, # seconds
+        :follow_location => true
+        # :params        => {:field1 => "a field"}
+      )
+    }
+  end
+
+  def self.hydra_run requests
+    pp requests
+    # Run the request via Hydra.
+    hydra = Typhoeus::Hydra.new
+    requests.each { |request| hydra.queue(request) }
+    hydra.run
+    pp requests
+    requests.map(&:response)
+  end
+
+  def self.ugly_guess_jp str
+    %w[UTF-8 EUC-JP Shift_JIS eucJP-ms Windows-31J].find do |encoding|
+      begin
+        tested = str.force_encoding(encoding)
+        tested.valid_encoding? && tested.encode('UTF-8').valid_encoding?
+      rescue Encoding::UndefinedConversionError => e
+        nil
+      end
+    end
+  end
+
+  def self.translate str
+    enc = ugly_guess_jp str
+    translated = str.force_encoding(enc).encode('UTF-8')
+  end
+
+  def self.write_cache responses
+    responses.each do |r|
+      filename = Digest::MD5.hexdigest(r.request.url)
+      File.open("#{Rails.root}/tmp/#{filename}", 'w') do |f|
+        f.puts r.inspect
+      end
+      HtmlFile.create_or_update_by_url(:url => r.request.url, :url_hash => filename, :body => translate(r.body))
+    end
+  end
+
+  def self.get_result_from_cache data
+    p 'OderSheet::get_result_from_cache :data => ' + data.inspect
     job_results = []
-    data["orders"].each do |job|
+    data.orders.each do |job|
       file = HtmlFile.by_url(job["url"]).first
+p :file => file
       file_body = file.try(:body)
       job_filter = job["filter"]
       result = filter_result file_body, job_filter
@@ -51,9 +110,9 @@ class OrderSheet
     end
   end
 
-  def initialize data, jobs = nil
+  def initialize data, orders = nil
     @data = data
-    @jobs = jobs
+    @orders = orders
     super
   end
 
@@ -61,22 +120,22 @@ class OrderSheet
     1
   end
 
-  def jobs
-    @jobs ||= @data["orders"].map { |job| AbstractJob.build job }
+  def orders
+    @orders ||= @data["orders"].map { |job| AbstractJob.build job }
   end
 
   def fixed?
-    jobs.find_all { |job| job['url'].present }.size == jobs.size
+    orders.find_all { |job| job['url'].present }.size == orders.size
   end
 
   def morph
-    morphed_jobs = jobs.map { |job| job.morph }
-    data = { "orders" => morphed_jobs }
-    OrderSheet.new data, morphed_jobs
+    morphed_orders = orders.map { |job| job.morph }
+    data = { "orders" => morphed_orders }
+    OrderSheet.new data, morphed_orders
   end
 
   def extract_urls
-    jobs.find_all { |job| job["url"].present? }.map { |job| job["url"] }
+    orders.find_all { |job| job["url"].present? }.map { |job| job["url"] }
   end
 
   def enqueue
@@ -92,7 +151,7 @@ class OrderSheet
   end
 
   def to_json
-    { "orders" => jobs.map(&:params) }.to_json
+    { "orders" => orders.map(&:params) }.to_json
   end
 
 end

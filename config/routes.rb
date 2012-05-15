@@ -54,6 +54,7 @@ GetMock::Application.routes.draw do
 
   match 'put_orders', :controller => 'order_sheet', :action => 'put'
   match 'get_result', :controller => 'order_sheet', :action => 'get_result'
+  match 'put_and_get', :controller => 'order_sheet', :action => 'put_and_get'
 
   # See how all your routes lay out with "rake routes"
 

@@ -63,6 +63,7 @@ class AucfanSearchJob < AbstractJob
   end
 
   def self.extract body
+    return if body.blank?
     # FIXME: correct property name
     require 'stringio'
     str = StringIO.new body
