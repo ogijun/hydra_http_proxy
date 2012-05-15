@@ -1,9 +1,8 @@
 class OrderSheetController < ApplicationController
 
   def put
-    order_sheet_json = order_from_request
-    if order_sheet_json
-      order_sheet = OrderSheet.new order_sheet_json
+    order_sheet = order_sheet_from_request
+    if order_sheet
       morphed = order_sheet.morph
       morphed.enqueue
       logger.debug morphed.inspect
@@ -20,31 +19,32 @@ class OrderSheetController < ApplicationController
     if bj.blank?
       render :text => 'No Job'
     else
-      job_results = OrderSheet.get_result_from_cache OrderSheet.new(JSON.parse(bj))
+      order_sheet = OrderSheet.new JSON.parse(bj)
+      job_results = order_sheet.get_result_from_cache
       headers["Content-Type"] ||= 'application/json'
       render :text => job_results.to_json
     end
   end
 
   def put_and_get
-    order_sheet_json = order_from_request
-    if order_sheet_json
-      order_sheet = OrderSheet.new order_sheet_json
+    order_sheet = order_sheet_from_request
+    if order_sheet
       morphed = order_sheet.morph
-      hydra_responses = OrderSheet.hydra_run_orders morphed.orders
+      hydra_responses = morphed.hydra_run_orders
       OrderSheet.write_cache hydra_responses
 
-      job_results = OrderSheet.get_result_from_cache morphed
+      job_results = morphed.get_result_from_cache
       headers["Content-Type"] ||= 'application/json'
       render :text => job_results.to_json
     end
   end
 
   protected
-  def order_from_request
+  def order_sheet_from_request
     body = request.body.read
     begin
-      JSON.parse body
+      parsed_body = JSON.parse body
+      OrderSheet.new parsed_body
     rescue JSON::ParserError => e
       logger.debug e
       nil

@@ -4,9 +4,9 @@ class GetRequestsJob
 
   def self.perform(data)
     begin
-      orders = JSON.parse(data)["orders"]
-      pp orders
-      hydra_responses = OrderSheet.hydra_run_orders orders
+      os = OrderSheet.new(JSON.parse(data))
+      pp os
+      hydra_responses = os.hydra_run_orders
       pp hydra_responses
       OrderSheet.write_cache hydra_responses
     rescue Exception => e
