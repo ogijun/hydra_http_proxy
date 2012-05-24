@@ -90,7 +90,9 @@ class AbstractJob
   end
 
   def query
-    URI.escape(params[:options][:q].join(' ').encode(query_encoding || 'UTF-8'))
+    q = params[:options][:q].join(' ')
+    p(:query_encoding => q.encoding, :acutual_query_encoding => q.encoding)
+    q.encode(query_encoding || 'UTF-8')
   end
 
   def sort

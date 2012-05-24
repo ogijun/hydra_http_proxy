@@ -22,6 +22,7 @@ class OrderSheet
   end
 
   def hydra_run requests
+    require 'pp'
     pp requests
     # Run the request via Hydra.
     hydra = Typhoeus::Hydra.new
