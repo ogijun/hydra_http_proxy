@@ -2,13 +2,13 @@ class ConsoleController < ApplicationController
   def index
   end
 
-  def put_bundle
+  def put_orders
     @json = params[:json]
     begin
       @data = JSON.parse(@json)
-      if @data['bundle'].present?
-        job_bundle = JobBundle.new @data
-        morphed = job_bundle.morph
+      if @data['orders'].present?
+        order_sheet = OrderSheet.new @data
+        morphed = order_sheet.morph
         morphed.enqueue
         @saved_key = morphed.save $redis
       end

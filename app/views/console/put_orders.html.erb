@@ -17,5 +17,5 @@
     <%= @saved_key %>
 </div>
 <% if @saved_key.present? %>
-    <%= link_to "Get Result", get_bundle_result_path(:id => @saved_key) %>
+    <%= link_to "Get Result", get_result_path(:id => @saved_key) %>
 <% end %>
