@@ -5,6 +5,58 @@
     <meta name=viewport content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
     <title>Debug Console - Get Rec 2</title>
     <link rel=stylesheet href=/stylesheets/inuit.css>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+
+    <style>
+    pre, code {font-family:monospace;}
+    .formatted_json
+    {
+      background-color:#eee;
+      color:#000;
+      border:solid 1px #ccc;
+    }
+    .formatted_json .brace
+    {
+      color:#0af;
+      font-weight:bold;
+    }
+    .formatted_json .bracket
+    {
+      color:#03f;
+      font-weight:bold;
+    }
+    .formatted_json .key
+    {
+      color:#c00;
+      font-weight:bold;
+    }
+    .formatted_json .string
+    {
+      color:#077;
+    }
+    .formatted_json .number
+    {
+      color:#a0a;
+    }
+    .formatted_json .boolean
+    {
+      color:#00f;
+    }
+    .formatted_json .function
+    {
+      color:#a63;
+      text-decoration:italic;
+    }
+    .formatted_json .null
+    {
+      color:#00f;
+    }
+    .formatted_json .comma
+    {
+      color:#000;
+      font-weight:bold;
+    }
+    </style>
 
 </head>
 <body class=wrapper>
