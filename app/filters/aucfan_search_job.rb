@@ -12,7 +12,8 @@ class AucfanSearchJob < AbstractJob
   def aucfan_url
     opt = params[:options]
     # base = 'http://aucfan.search.zero-start.jp/api/compat/item_search2.cgi'
-    base = 'http://192.168.2.58/shumaru/item_search2.cgi'
+    # base = 'http://192.168.2.58/shumaru/item_search2.cgi'
+    base = 'http://210.152.140.226/api/compat/item_search2.cgi'
     ym = opt[:ym] # || 201202
     sort = (opt[:sort] || 'date desc').split(/\s/)
 
