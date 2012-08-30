@@ -11,24 +11,33 @@ class AucfanSearchJob < AbstractJob
 
   def aucfan_url
     opt = params[:options]
-    # base = 'http://aucfan.search.zero-start.jp/api/compat/item_search2.cgi'
-    # base = 'http://192.168.2.58/shumaru/item_search2.cgi'
-    base = 'http://210.152.140.226/api/compat/item_search2.cgi'
-    ym = opt[:ym] # || 201202
-    sort = (opt[:sort] || 'date desc').split(/\s/)
+    # base2 = 'http://192.168.2.58/shumaru/item_search2.cgi'
+    # base3 = 'http://192.168.2.74//item_search3.cgi'
+    base2 = 'http://210.152.140.226/api/compat/item_search2.cgi'
+    base3 = 'http://210.152.140.226/api/compat/item_search3.cgi'
+
+    if opt[:s] == 'mix'
+      base = base3
+      opt_s = ''
+    else
+      base = base2
+      opt_s = "&#{opt[:s]}"
+    end
+
+    ym = opt[:ym]
+    sort = opt[:sort].split(' ')
+    sort[0] = ['date', 'price', 'bid'].include?(sort[0]) ? sort[0] : 'date'
+    sort[1] = ['asc', 'desc'].include?(sort[1]) ? sort[1] : 'asc'
 
     new_params = {
       :search => query,
       :ipp => 30,
-      :c_ya => opt[:c_ya],
       :page => opt[:page],
       :ym => ym,
       :sort => sort[0],
       :rev => (sort[1] == 'desc' ? 0 : 1),
-      :ya => '',
-      opt[:s] => ''
     }
-    "#{base}?#{new_params.to_query}"
+    "#{base}?#{new_params.to_query}" + opt_s
   end
 
   def self.page_id aid
