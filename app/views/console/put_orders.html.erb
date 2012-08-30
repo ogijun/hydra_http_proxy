@@ -1,0 +1,168 @@
+<h1>Debug Console</h1>
+<%= render :partial => 'form' %>
+
+<script>
+
+function IsArray(obj) {
+  return obj &&
+          typeof obj === 'object' &&
+          typeof obj.length === 'number' &&
+          !(obj.propertyIsEnumerable('length'));
+}
+
+function Process(json, target){
+  if(!!json) json = json.split("\n").join("\\" + "n");
+  try{
+    var obj = JSON.parse(json);
+    $(target).html("<pre class=\"formatted_json\">" + ProcessData(obj, 0, false, false, false) + "</pre>");
+    $(".marker").click(MarkerClicked);
+  } catch(e) {
+    $(target).html(("<div class=\"error\">JSON is not well formated:\n" + e.message + "</div>").split("\n").join('<br />'));
+  }
+}
+
+function ProcessData(obj, indent, comma, line_break, no_indent){
+  var html = "";
+  var markerHtml = "<span class=\"marker\">[-]</span>";
+  switch (typeof obj) {
+  case null:
+    html += FormatLiteral("null", false, comma, indent, line_break, "null");
+    break;
+  case 'object':
+    if(IsArray(obj)){
+      html += ProcessArray(obj, indent, comma, no_indent, markerHtml);
+    } else {
+      html += ProcessObject(obj, indent, comma, line_break, no_indent, markerHtml);
+    }
+    break;
+  case 'number':
+    html += FormatLiteral(obj, false, comma, indent, line_break, "number");
+    break;
+  case 'boolean':
+    html += FormatLiteral(obj, false, comma, indent, line_break, "boolean");
+    break;
+  case 'function':
+    obj = FormatFunction(indent, obj);
+    html += FormatLiteral(obj, false, comma, indent, line_break, "function");
+    break;
+  case 'undefined':
+    html += FormatLiteral("undefined", false, comma, indent, line_break, "null");
+    break;
+  default:
+    html += FormatLiteral(obj.toString().split("\\").join("\\\\").split('"').join('\\"'), true, comma, indent, line_break, "string");
+  }
+
+  return html;
+}
+
+function ProcessArray(obj, indent, comma, no_indent, markerHtml) {
+  var html = '';
+  var comma_html = (comma) ? "<span class='comma'>,</span> " : "";
+  if(obj.length == 0){
+    html += GetRow(indent, "<span class='bracket'>[ ]</span>" + comma_html, no_indent);
+  } else {
+    html += GetRow(indent, "<span class='bracket'>[</span>" + markerHtml + "<span class='collapsible'>", no_indent);
+    for(var i = 0; i < obj.length; i++){
+      html += ProcessData(obj[i], indent + 1, i < (obj.length - 1), true, false);
+    }
+    html += GetRow(indent, "</span>" + "<span class='bracket'>]</span>" + comma_html);
+  }
+  return html;
+}
+
+function ProcessObject(obj, indent, comma, line_break, no_indent, markerHtml) {
+  var html = '';
+  var comma_html = (comma) ? "<span class='comma'>,</span> " : "";
+  var numProps = 0;
+  for(var prop in obj) numProps++;
+  if (numProps == 0){
+    html += GetRow(indent, "<span class='brace'>{ }</span>" + comma_html, no_indent);
+  } else {
+    html += GetRow(indent, "<span class='brace'>{</span>" + markerHtml + "<span class='collapsible'>", no_indent);
+    var j = 0;
+    for(var prop in obj){
+      html += GetRow(indent + 1, "<span class='key'>" + "\"" + prop + "\"" + "</span>: " + ProcessData(obj[prop], indent + 1, ++j < numProps, false, true));
+    }
+    html += GetRow(indent, "</span>" + "<span class='brace'>}</span>" + comma_html);
+  }
+  return html;
+}
+
+function FormatLiteral(literal, quote, comma, indent, line_break, style){
+  var comma_html = (comma) ? "<span class='comma'>,</span> " : "";
+  if(typeof literal == 'string')
+    literal = literal.split("<").join("&lt;").split(">").join("&gt;");
+  if (quote)
+    literal = "&quot;" + literal + "&quot;";
+  var str = "<span class='" + style + "'>" + literal + comma_html + "</span>";
+  if(line_break) str = GetRow(indent, str, false);
+  return str;
+}
+function FormatFunction(indent, obj){
+  var tabs = "";
+  for(var i = 0; i < indent; i++) tabs += '  ';
+  var funcStrArray = obj.toString().split("\n");
+  var str = "";
+  for(var i = 0; i < funcStrArray.length; i++){
+    str += ((i==0)?"":tabs) + funcStrArray[i] + "\n";
+  }
+  return str;
+}
+function GetRow(indent, data, no_indent){
+  var tabs = "";
+  if (!no_indent)
+    for(var i = 0; i < indent; i++)
+      tabs += '    ';
+  if(data != null && data.length > 0 && data.charAt(data.length-1) != "\n")
+    data = data + "\n";
+  return tabs + data;
+}
+
+function MarkerClicked() {
+  var marker = $(this);
+  var container = marker.next();
+  if(!container) return;
+  if(container.css('display') == "none"){
+    container.show();
+    marker.html('[-]');
+  }
+  else {
+    container.hide();
+    marker.html('[+]');
+  }
+}
+
+</script>
+
+<!-- ////////////////////////////////////////////////////////////////// -->
+
+<div>
+    <%= params %>
+</div>
+
+<div>
+    DATA: <br />
+    <%= @data %>
+</div>
+
+<div>
+    ORDERS: <br />
+    <%= @order_sheet.to_json %>
+</div>
+
+<div>
+    MORPHED: <br />
+    <textarea id="RawJson" style="display:none;"><%=raw @morphed.to_json %></textarea>
+    <div id="morphed_json" class="formatted_json"></div>
+</div>
+
+<div>
+    KEY: <br />
+    <%= @saved_key %>
+</div>
+
+<% if @saved_key.present? %>
+    <%= link_to "Get Result", get_result_path(:id => @saved_key) %>
+<% end %>
+
+<script>Process('<%=raw @morphed.to_json %>', '#morphed_json');</script>
