@@ -81,27 +81,30 @@ class AucfanSearchJob < AbstractJob
     list = []
     str.readlines.each do |row|
       unless row =~ /^<\/html>/
-        cols = row.split "\t"
-        auction_id = cols[4]
-        sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
-        item = {
-          :auction_id => auction_id,
-          :aucview_url => "/aucview/yahoo/#{auction_id}/",
-          :url => (url = "http://#{sub}auctions.yahoo.co.jp/auction/#{auction_id}"),
-          :affiliate_url => url,
-          :site => site,
-          :title => cols[5],
-          :bid => cols[0],
-          :start_price => cols[1],
-          :price => cols[2],
-          :end_time => cols[3],
-          :end_date => (end_date = Time.at(cols[3].to_i - 15*3600).strftime('%Y%m%d')),
-          :img => "http://aucfan.com/item_data/thumbnail/#{end_date}/yahoo/#{auction_id[0]}/#{auction_id}.jpg"
-        }
-        list.push item
+        list.push extract_item(row, site)
       end
     end
     { :list => list, :count => count.to_i }
+  end
+
+  def self.extract_item row, site
+    cols = row.split "\t"
+    auction_id = cols[4]
+    sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
+    item = {
+      :auction_id => auction_id,
+      :aucview_url => "/aucview/yahoo/#{auction_id}/",
+      :url => (url = "http://#{sub}auctions.yahoo.co.jp/auction/#{auction_id}"),
+      :affiliate_url => url,
+      :site => site,
+      :title => cols[5],
+      :bid => cols[0],
+      :start_price => cols[1],
+      :price => cols[2],
+      :end_time => cols[3],
+      :end_date => (end_date = Time.at(cols[3].to_i - 15*3600).strftime('%Y%m%d')),
+      :img => "http://aucfan.com/item_data/thumbnail/#{end_date}/yahoo/#{auction_id[0]}/#{auction_id}.jpg"
+    }
   end
 
 end
