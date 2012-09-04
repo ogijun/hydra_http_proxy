@@ -89,7 +89,7 @@ class AucfanSearchJob < AbstractJob
 
   def self.extract_item row, site
     case site
-    when 'ya'
+    when 'yahoo'
       extract_item_ya row
     when 'mix'
       extract_item_mix row
