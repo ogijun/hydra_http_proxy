@@ -24,7 +24,7 @@ class AucfanSearchJob < AbstractJob
       opt_s = "&#{opt[:s]}"
     end
 
-    ym = opt[:ym]
+    ym = opt[:t] != 'l30d' ? opt[:t] : nil
     sort = opt[:sort].split(' ')
     sort[0] = ['date', 'price', 'bid'].include?(sort[0]) ? sort[0] : 'date'
     sort[1] = ['asc', 'desc'].include?(sort[1]) ? sort[1] : 'asc'
