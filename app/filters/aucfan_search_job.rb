@@ -98,7 +98,7 @@ class AucfanSearchJob < AbstractJob
 
   def self.extract_item_ya row
     cols = row.split "\t"
-    cols.shift 'ya'
+    cols.unshift 'ya'
     yahoo_item cols
   end
 
