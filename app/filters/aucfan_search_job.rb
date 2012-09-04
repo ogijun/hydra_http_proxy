@@ -77,14 +77,14 @@ class AucfanSearchJob < AbstractJob
     # FIXME: correct property name
     require 'stringio'
     str = StringIO.new body
-    site, count = str.gets.chomp.split(':')
+    site, count = str.gets.chomp[1..-1].split(':')
     list = []
     str.readlines.each do |row|
       unless row =~ /^<\/html>/
         list.push extract_item(row, site)
       end
     end
-    { :list => list, :count => count.to_i }
+    { :list => list, :count => count.to_i, :site => site }
   end
 
   def self.extract_item row, site
@@ -92,18 +92,21 @@ class AucfanSearchJob < AbstractJob
     auction_id = cols[4]
     sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
     item = {
-      :auction_id => auction_id,
-      :aucview_url => "/aucview/yahoo/#{auction_id}/",
-      :url => (url = "http://#{sub}auctions.yahoo.co.jp/auction/#{auction_id}"),
-      :affiliate_url => url,
       :site => site,
       :title => cols[5],
-      :bid => cols[0],
-      :start_price => cols[1],
+      :aid => auction_id,
       :price => cols[2],
-      :end_time => cols[3],
-      :end_date => (end_date = Time.at(cols[3].to_i - 15*3600).strftime('%Y%m%d')),
-      :img => "http://aucfan.com/item_data/thumbnail/#{end_date}/yahoo/#{auction_id[0]}/#{auction_id}.jpg"
+      :priceFormatted => cols[2],
+      :bid => cols[0].to_i,
+      :time => Time.at(cols[3].to_i - 15*3600).strftime('%Y-%m-%d'),
+      :timeFormatted => Time.at(cols[3].to_i - 15*3600).strftime('%Y-%m-%d'),
+      :thumbnail => "http://aucfan.com/item_data/thumbnail/#{end_date}/yahoo/#{auction_id[0]}/#{auction_id}.jpg",
+      :aucviewurl => "/aucview/yahoo/#{auction_id}/",
+      :url => (url = "http://#{sub}auctions.yahoo.co.jp/auction/#{auction_id}"),
+      :realsiteurl => url,
+      :sellerId => cols[7],
+      :startPrice => cols[1].to_i,
+      :syuppinItemCount => cols[8].to_i
     }
   end
 
