@@ -128,7 +128,7 @@ class AucfanSearchJob < AbstractJob
     end_time = Time.at(cols[5].to_i - 15*3600)
     end_date = end_time.strftime('%Y%m%d')
     item = {
-      :site => col[0],
+      :site => cols[0],
       :title => cols[7],
       :aid => auction_id,
       :price => cols[4],
