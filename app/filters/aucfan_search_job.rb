@@ -88,13 +88,22 @@ class AucfanSearchJob < AbstractJob
   end
 
   def self.extract_item row, site
+    case site
+    when 'ya'
+      extract_item_ya row
+    when 'mix'
+      extract_item_mix row
+    end
+  end
+
+  def self.extract_item_ya row
     cols = row.split "\t"
     auction_id = cols[4]
     sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
     end_time = Time.at(cols[3].to_i - 15*3600)
     end_date = end_time.strftime('%Y%m%d')
     item = {
-      :site => site,
+      :site => 'ya',
       :title => cols[5],
       :aid => auction_id,
       :price => cols[2],
@@ -109,6 +118,31 @@ class AucfanSearchJob < AbstractJob
       :sellerId => cols[7],
       :startPrice => cols[1].to_i,
       :syuppinItemCount => cols[8].to_i
+    }
+  end
+
+  def self.extract_item_mix row
+    cols = row.split "\t"
+    auction_id = cols[6]
+    sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
+    end_time = Time.at(cols[5].to_i - 15*3600)
+    end_date = end_time.strftime('%Y%m%d')
+    item = {
+      :site => col[0],
+      :title => cols[7],
+      :aid => auction_id,
+      :price => cols[4],
+      :priceFormatted => cols[4],
+      :bid => cols[1].to_i,
+      :time => end_time.strftime('%Y-%m-%d'),
+      :timeFormatted => end_time.strftime('%Y-%m-%d'),
+      :thumbnail => "http://aucfan.com/item_data/thumbnail/#{end_date}/yahoo/#{auction_id[0]}/#{auction_id}.jpg",
+      :aucviewurl => "/aucview/yahoo/#{auction_id}/",
+      :url => (url = "http://#{sub}auctions.yahoo.co.jp/auction/#{auction_id}"),
+      :realsiteurl => url,
+      :sellerId => nil,
+      :startPrice => cols[3].to_i,
+      :syuppinItemCount => nil
     }
   end
 
