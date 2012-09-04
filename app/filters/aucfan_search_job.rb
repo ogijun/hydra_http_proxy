@@ -91,6 +91,12 @@ class AucfanSearchJob < AbstractJob
     case site
     when 'yahoo'
       extract_item_ya row
+    when 'rakuten'
+      extract_item_ra row
+    when 'mbok'
+      extract_item_mo row
+    when 'bidders'
+      extract_item_bi row
     when 'mix'
       extract_item_mix row
     end
@@ -102,9 +108,36 @@ class AucfanSearchJob < AbstractJob
     yahoo_item cols
   end
 
+  def self.extract_item_ra row
+    cols = row.split "\t"
+    cols.unshift 'ra'
+    rakuten_item cols
+  end
+
+  def self.extract_item_mo row
+    cols = row.split "\t"
+    cols.unshift 'mo'
+    mbok_item cols
+  end
+
+  def self.extract_item_bi row
+    cols = row.split "\t"
+    cols.unshift 'bi'
+    bidders_item cols
+  end
+
   def self.extract_item_mix row
     cols = row.split "\t"
-    yahoo_item cols
+    case cols[0]
+    when 'ya'
+      yahoo_item cols
+    when 'ra'
+      rakuten_item cols
+    when 'mo'
+      mbok_item cols
+    when 'bi'
+      bidders_item cols
+    end
   end
 
   def self.yahoo_item cols
@@ -124,6 +157,78 @@ class AucfanSearchJob < AbstractJob
       :thumbnail => "http://aucfan.com/item_data/thumbnail/#{end_date}/yahoo/#{auction_id[0]}/#{auction_id}.jpg",
       :aucviewurl => "/aucview/yahoo/#{auction_id}/",
       :url => (url = "http://#{sub}auctions.yahoo.co.jp/auction/#{auction_id}"),
+      :realsiteurl => url,
+      :sellerId => cols[8],
+      :startPrice => cols[2].to_i,
+      :syuppinItemCount => cols[9]
+    }
+  end
+
+  def self.rakuten_item cols
+    auction_id = cols[5]
+    sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
+    end_time = Time.at(cols[4].to_i - 15*3600)
+    end_date = end_time.strftime('%Y%m%d')
+    item = {
+      :site => cols[0],
+      :title => cols[6],
+      :aid => auction_id,
+      :price => cols[3],
+      :priceFormatted => cols[3],
+      :bid => cols[1].to_i,
+      :time => end_time.strftime('%Y-%m-%d'),
+      :timeFormatted => end_time.strftime('%Y-%m-%d'),
+      :thumbnail => "/img/thumb_camera.gif",
+      :aucviewurl => "/aucview/yahoo/#{auction_id}/",
+      :url => (url = "http://auction.item.rakuten.co.jp/#{cols[8]}/#{auction_id}/"),
+      :realsiteurl => url,
+      :sellerId => cols[8],
+      :startPrice => cols[2].to_i,
+      :syuppinItemCount => cols[9]
+    }
+  end
+
+  def self.mbok_item cols
+    auction_id = cols[5]
+    sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
+    end_time = Time.at(cols[4].to_i - 15*3600)
+    end_date = end_time.strftime('%Y%m%d')
+    item = {
+      :site => cols[0],
+      :title => cols[6],
+      :aid => auction_id,
+      :price => cols[3],
+      :priceFormatted => cols[3],
+      :bid => cols[1].to_i,
+      :time => end_time.strftime('%Y-%m-%d'),
+      :timeFormatted => end_time.strftime('%Y-%m-%d'),
+      :thumbnail => "/img/thumb_camera.gif",
+      :aucviewurl => "/aucview/mbok/#{auction_id}/",
+      :url => (url = "http://www.mbok.jp/item/item_#{auction_id}.html"),
+      :realsiteurl => url,
+      :sellerId => cols[8],
+      :startPrice => cols[2].to_i,
+      :syuppinItemCount => cols[9]
+    }
+  end
+
+  def self.bidders_item cols
+    auction_id = cols[5]
+    sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
+    end_time = Time.at(cols[4].to_i - 15*3600)
+    end_date = end_time.strftime('%Y%m%d')
+    item = {
+      :site => cols[0],
+      :title => cols[6],
+      :aid => auction_id,
+      :price => cols[3],
+      :priceFormatted => cols[3],
+      :bid => cols[1].to_i,
+      :time => end_time.strftime('%Y-%m-%d'),
+      :timeFormatted => end_time.strftime('%Y-%m-%d'),
+      :thumbnail => "/img/thumb_camera.gif",
+      :aucviewurl => "http://ap4.aucfan.com/aucview/bidders/#{auction_id}/",
+      :url => (url = "http://aucfan.com/ext/item/bd/#{auction_id}/"),
       :realsiteurl => url,
       :sellerId => cols[8],
       :startPrice => cols[2].to_i,
