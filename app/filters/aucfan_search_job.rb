@@ -180,7 +180,7 @@ class AucfanSearchJob < AbstractJob
       :timeFormatted => end_time.strftime('%Y-%m-%d'),
       :thumbnail => "/img/thumb_camera.gif",
       :aucviewurl => "/aucview/yahoo/#{auction_id}/",
-      :url => (url = "http://auction.item.rakuten.co.jp/#{cols[8]}/#{auction_id}/"),
+      :url => (url = "http://auction.item.rakuten.co.jp/#{cols[8]}/a/#{auction_id}/"),
       :realsiteurl => url,
       :sellerId => cols[8],
       :startPrice => cols[2].to_i,
