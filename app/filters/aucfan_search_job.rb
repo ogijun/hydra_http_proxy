@@ -91,6 +91,8 @@ class AucfanSearchJob < AbstractJob
     cols = row.split "\t"
     auction_id = cols[4]
     sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
+    end_time = Time.at(cols[3].to_i - 15*3600)
+    end_date = end_time.strftime('%Y%m%d')
     item = {
       :site => site,
       :title => cols[5],
@@ -98,8 +100,8 @@ class AucfanSearchJob < AbstractJob
       :price => cols[2],
       :priceFormatted => cols[2],
       :bid => cols[0].to_i,
-      :time => Time.at(cols[3].to_i - 15*3600).strftime('%Y-%m-%d'),
-      :timeFormatted => Time.at(cols[3].to_i - 15*3600).strftime('%Y-%m-%d'),
+      :time => end_time.strftime('%Y-%m-%d'),
+      :timeFormatted => end_time.strftime('%Y-%m-%d'),
       :thumbnail => "http://aucfan.com/item_data/thumbnail/#{end_date}/yahoo/#{auction_id[0]}/#{auction_id}.jpg",
       :aucviewurl => "/aucview/yahoo/#{auction_id}/",
       :url => (url = "http://#{sub}auctions.yahoo.co.jp/auction/#{auction_id}"),
