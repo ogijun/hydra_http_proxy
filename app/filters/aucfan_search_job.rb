@@ -123,16 +123,16 @@ class AucfanSearchJob < AbstractJob
 
   def self.extract_item_mix row
     cols = row.split "\t"
-    auction_id = cols[6]
+    auction_id = cols[5]
     sub = (page_id = page_id(auction_id)).present? ? page_id + '.' : ''
-    end_time = Time.at(cols[5].to_i - 15*3600)
+    end_time = Time.at(cols[4].to_i - 15*3600)
     end_date = end_time.strftime('%Y%m%d')
     item = {
       :site => cols[0],
-      :title => cols[7],
+      :title => cols[6],
       :aid => auction_id,
-      :price => cols[4],
-      :priceFormatted => cols[4],
+      :price => cols[3],
+      :priceFormatted => cols[3],
       :bid => cols[1].to_i,
       :time => end_time.strftime('%Y-%m-%d'),
       :timeFormatted => end_time.strftime('%Y-%m-%d'),
@@ -141,7 +141,7 @@ class AucfanSearchJob < AbstractJob
       :url => (url = "http://#{sub}auctions.yahoo.co.jp/auction/#{auction_id}"),
       :realsiteurl => url,
       :sellerId => nil,
-      :startPrice => cols[3].to_i,
+      :startPrice => cols[2].to_i,
       :syuppinItemCount => nil
     }
   end
