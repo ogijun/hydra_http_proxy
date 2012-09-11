@@ -11,8 +11,8 @@ class AucfanItemJob < AbstractJob
 
   require 'nokogiri'
   def self.extract body
-    doc = Nokogiri::XML(body)
-    extract_row doc.children[0]
+    doc = Nokogiri::XML(body.sub('<?xml version="1.0" encoding="euc-jp" ?>', ''))
+    extract_row doc.at_css('item')
   end
 
   def self.extract_row item
@@ -30,7 +30,7 @@ class AucfanItemJob < AbstractJob
       :beginningPrice => item.at_css('beginningPrice').text,
       :price => item.at_css('price').text,
       :amount => item.at_css('amount').text,
-      :bid => item.at_css('bid').text.to_i,
+      :bid => (item.at_css('bid').text.to_i rescue nil),
       :bidUnit => item.at_css('bidUnit').text.to_i,
       :seller => {
         :id => item.at_css('seller id').text,
